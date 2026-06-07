@@ -109,7 +109,31 @@ const firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 window.onYouTubeIframeAPIReady = function() {
-    if (document.getElementById('yt-player')) player = new YT.Player('yt-player');
+    if (document.getElementById('yt-player')) {
+        player = new YT.Player('yt-player', {
+            playerVars: {
+                autoplay: 1,
+                controls: 0,
+                rel: 0,
+                loop: 1,
+                playlist: 'M7jgxJ_4TJs',
+                mute: 1,
+                start: 1,
+                playsinline: 1,
+                origin: window.location.origin
+            },
+            events: {
+                'onReady': function(event) {
+                    event.target.mute();
+                    event.target.playVideo();
+                },
+                'onStateChange': function(event) {
+                    if (event.data === YT.PlayerState.PLAYING) isBgPlaying = true;
+                    else if (event.data === YT.PlayerState.PAUSED) isBgPlaying = false;
+                }
+            }
+        });
+    }
     if (document.getElementById('yt-music-iframe')) {
         musicPlayer = new YT.Player('yt-music-iframe', {
             height: '200', width: '200', videoId: playlist[currentTrack].id,
