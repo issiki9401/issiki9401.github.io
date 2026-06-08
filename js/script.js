@@ -111,29 +111,25 @@ firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 window.onYouTubeIframeAPIReady = function() {
     if (document.getElementById('yt-player')) {
         player = new YT.Player('yt-player', {
-            playerVars: {
-                autoplay: 1,
-                controls: 0,
-                rel: 0,
-                loop: 1,
-                playlist: 'M7jgxJ_4TJs',
-                mute: 1,
-                start: 1,
-                playsinline: 1,
-                origin: window.location.origin
-            },
             events: {
-                'onReady': function(event) {
-                    event.target.mute();
-                    event.target.playVideo();
+                'onReady': (event) => {
+                    event.target.mute(); // 確保靜音以符合自動播放規範
+                    event.target.playVideo(); // 強制喚醒播放
                 },
-                'onStateChange': function(event) {
-                    if (event.data === YT.PlayerState.PLAYING) isBgPlaying = true;
-                    else if (event.data === YT.PlayerState.PAUSED) isBgPlaying = false;
+                'onStateChange': (event) => {
+                    // 自動將 UI 按鈕與實際影片狀態同步，避免不同步導致按鍵失效
+                    if (event.data === YT.PlayerState.PLAYING) {
+                        isBgPlaying = true;
+                        if(bgPlayPauseBtn) bgPlayPauseBtn.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>`;
+                    } else if (event.data === YT.PlayerState.PAUSED) {
+                        isBgPlaying = false;
+                        if(bgPlayPauseBtn) bgPlayPauseBtn.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`;
+                    }
                 }
             }
         });
     }
+    
     if (document.getElementById('yt-music-iframe')) {
         musicPlayer = new YT.Player('yt-music-iframe', {
             height: '200', width: '200', videoId: playlist[currentTrack].id,
@@ -148,12 +144,9 @@ const bgMuteBtn = document.getElementById('mute-btn');
 
 if (bgPlayPauseBtn) {
     bgPlayPauseBtn.addEventListener('click', () => {
-        if (player && typeof player.pauseVideo === 'function') {
-            isBgPlaying ? player.pauseVideo() : player.playVideo();
-            bgPlayPauseBtn.innerHTML = isBgPlaying 
-                ? `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`
-                : `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>`;
-            isBgPlaying = !isBgPlaying;
+        if (player && typeof player.getPlayerState === 'function') {
+            const state = player.getPlayerState();
+            state === YT.PlayerState.PLAYING ? player.pauseVideo() : player.playVideo();
         }
     });
 }
