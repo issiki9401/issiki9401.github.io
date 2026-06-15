@@ -1,0 +1,165 @@
+/* ====== 基礎與背景設定 ====== */
+body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, sans-serif; background-color: #151515; overflow-x: hidden; }
+
+/* ====== 導覽列 ====== */
+.mac-glass-nav { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); width: calc(100vw * 5 / 7); height: 56px; display: flex; justify-content: space-between; align-items: center; padding: 0 24px; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%); border: 1px solid rgba(255, 255, 255, 0.2); border-top-color: rgba(255, 255, 255, 0.5); border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.4); z-index: 1000; overflow: hidden; --mouse-x: -100px; --mouse-y: -100px; }
+.mac-glass-nav::before { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle 80px at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.15), transparent); pointer-events: none; z-index: -1; }
+.nav-brand { font-size: 1.2rem; font-weight: 700; color: white; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); cursor: pointer; }
+.nav-menu { display: flex; align-items: center; gap: 12px; }
+
+.glass-btn { display: flex; align-items: center; padding: 8px 16px; color: white; text-decoration: none; font-size: 0.9rem; font-weight: 500; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.15); border-top-color: rgba(255, 255, 255, 0.3); border-radius: 12px; transition: all 0.3s ease; outline: none; cursor: pointer; }
+.glass-btn:hover { background: rgba(255, 255, 255, 0.15); border-top-color: rgba(255, 255, 255, 0.6); }
+
+/* ====== 右側控制面板與懸停提示 ====== */
+.side-controls { position: fixed; right: 20px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 16px; z-index: 1000; }
+.icon-btn { width: 48px; height: 48px; padding: 0; justify-content: center; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); position: relative; }
+.side-controls .icon-btn::before { content: attr(data-tooltip); position: absolute; right: 60px; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: white; padding: 8px 14px; border-radius: 12px; font-size: 0.9rem; white-space: nowrap; opacity: 0; pointer-events: none; border: 1px solid rgba(255, 255, 255, 0.2); transition: opacity 0.3s ease, transform 0.3s ease; }
+.side-controls .icon-btn:hover::before { opacity: 1; transform: translateY(-50%) translateX(-5px); }
+
+/* ====== 首頁搜尋框 ====== */
+.search-wrapper { padding: 6px 12px; cursor: text; } .search-wrapper svg { margin-right: 8px; opacity: 0.8; }
+.glass-input { background: transparent; border: none; color: white; font-size: 0.9rem; width: 100px; outline: none; transition: width 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.glass-input::placeholder { color: rgba(255, 255, 255, 0.6); } .glass-input:focus { width: 150px; border: none; outline: none; }
+
+/* ====== 背景影片與遮罩 ====== */
+.video-background { background: #000; position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: -99; }
+.video-foreground, .video-background iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+@media (min-aspect-ratio: 16/9) { .video-foreground { height: 300%; top: -100%; } } @media (max-aspect-ratio: 16/9) { .video-foreground { width: 300%; left: -100%; } }
+.video-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); z-index: -1; }
+
+/* ====== 首頁大標題 ====== */
+.hero-content { height: 100vh; width: 100%; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; padding-top: 35vh; box-sizing: border-box; position: relative; z-index: 20; background: linear-gradient(to bottom, transparent 30%, #151515 100%); transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.hero-title { color: white; font-size: 3.5rem; font-weight: 800; letter-spacing: 2px; text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8); text-align: center; padding: 0 20px; margin: 0; transition: opacity 0.3s ease; }
+
+/* ====== 音樂播放器橫幅 (全域獨立層次 - 預設展開狀態) ====== */
+.music-banner { 
+    position: absolute; 
+    bottom: 8vh; 
+    left: 50%; 
+    transform: translateX(-50%);
+    width: 80vw; max-width: 1000px; height: 100px; padding: 0 36px; display: flex; justify-content: space-between; align-items: center; 
+    background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); 
+    border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 24px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5); 
+    box-sizing: border-box; transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); 
+    z-index: 9999; /* 絕對最高層級，避免被任何頁面元素蓋過 */
+    animation: fadeInBanner 1s ease-out forwards; overflow: hidden; 
+}
+/* 改用 margin-bottom 來做動畫，防止覆蓋掉絕對定位屬性 */
+@keyframes fadeInBanner { from { opacity: 0; margin-bottom: -40px; } to { opacity: 1; margin-bottom: 0; } }
+
+.music-info { display: flex; align-items: center; gap: 24px; width: 45%; transition: all 0.4s ease; }
+.music-cover { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 4px 15px rgba(0,0,0,0.5); animation: spin 8s linear infinite; animation-play-state: paused; transition: all 0.4s ease; }
+.music-cover.playing { animation-play-state: running; } @keyframes spin { 100% { transform: rotate(360deg); } }
+.music-text { overflow: hidden; white-space: nowrap; transition: all 0.4s ease; }
+.music-text h3 { margin: 0 0 8px 0; font-size: 1.4rem; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.5); text-overflow: ellipsis; overflow: hidden; transition: all 0.4s ease;}
+.music-text span { font-size: 0.9rem; color: rgba(255,255,255,0.6); }
+
+.music-player-ui { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; width: 50%; justify-content: center; transition: all 0.4s ease; }
+.music-controls { display: flex; gap: 16px; justify-content: flex-end; width: 100%; align-items: center; transition: all 0.4s ease; }
+.icon-btn.play-main-btn { width: 52px; height: 52px; transition: all 0.4s ease;}
+.music-progress-bar { display: flex; align-items: center; gap: 16px; width: 100%; color: rgba(255,255,255,0.7); font-size: 0.85rem; font-family: monospace; letter-spacing: 1px; transition: all 0.4s ease; }
+
+.music-slider { -webkit-appearance: none; appearance: none; width: 100%; background: transparent; cursor: pointer; flex-grow: 1; } .music-slider:focus { outline: none; }
+.music-slider::-webkit-slider-runnable-track { width: 100%; height: 4px; background: rgba(255, 255, 255, 0.2); border-radius: 2px; }
+.music-slider::-webkit-slider-thumb { -webkit-appearance: none; height: 14px; width: 14px; border-radius: 50%; background: white; margin-top: -5px; box-shadow: 0 0 8px rgba(0,0,0,0.6); transition: transform 0.1s; } .music-slider::-webkit-slider-thumb:hover { transform: scale(1.3); }
+
+.scroll-indicator { position: absolute; bottom: 30px; color: rgba(255,255,255,0.6); cursor: pointer; transition: opacity 0.3s ease; } .scroll-indicator:hover { color: white; }
+
+/* =======================================================
+   1. 子頁面狀態 (.is-subpage) - 僅縮短標題背景
+   ======================================================= */
+body.is-subpage .hero-content { height: 180px; min-height: 180px; padding: 0; background: linear-gradient(to bottom, transparent 0%, #151515 100%); z-index: 20; }
+body.is-subpage .hero-title, body.is-subpage .scroll-indicator { opacity: 0; pointer-events: none; display: none; }
+
+/* =======================================================
+   2. 浮動播放器狀態 (.mini-player) - 完全斷開原定位束縛
+   ======================================================= */
+/* 預設：縮小膠囊 */
+body.mini-player .music-banner {
+    position: fixed; 
+    top: 96px; 
+    right: max(5vw, calc(50vw - 400px)); 
+    
+    /* 強制解除原本 absolute 帶來的影響 */
+    bottom: auto; 
+    left: auto; 
+    transform: none; 
+    animation: none; /* 關閉進場動畫，防止 bottom 屬性衝突 */
+    margin-bottom: 0;
+    
+    width: 130px; height: 64px; padding: 0 20px; border-radius: 50px; 
+    background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(24px) saturate(200%); -webkit-backdrop-filter: blur(24px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.2);
+    z-index: 9999; justify-content: center; gap: 16px; cursor: default;
+}
+body.mini-player .music-progress-bar, body.mini-player .music-text, body.mini-player #music-next-btn { display: none; }
+body.mini-player .music-info { width: auto; flex: none; gap: 0; margin: 0; }
+body.mini-player .music-cover { width: 36px; height: 36px; }
+body.mini-player .music-player-ui { width: auto; flex-direction: row; gap: 0; margin: 0; justify-content: flex-end; }
+body.mini-player .music-controls { width: auto; gap: 0; justify-content: center; }
+body.mini-player .icon-btn.play-main-btn { width: 36px; height: 36px; background: transparent; border: none; box-shadow: none; }
+body.mini-player .icon-btn.play-main-btn svg { width: 18px; height: 18px; }
+
+/* 懸停滑鼠：平滑拉開顯示全功能 */
+body.mini-player .music-banner:hover { width: 300px; padding: 0 24px; justify-content: space-between; }
+body.mini-player .music-banner:hover .music-info { flex: 1; gap: 12px; }
+body.mini-player .music-banner:hover .music-cover { width: 40px; height: 40px; }
+body.mini-player .music-banner:hover .music-text { display: block; opacity: 1; }
+body.mini-player .music-banner:hover .music-text h3 { font-size: 0.95rem; margin: 0; max-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+body.mini-player .music-banner:hover .music-player-ui { gap: 12px; }
+body.mini-player .music-banner:hover .music-controls { gap: 12px; }
+body.mini-player .music-banner:hover .icon-btn.play-main-btn { width: 40px; height: 40px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); }
+body.mini-player .music-banner:hover #music-next-btn { display: flex; width: 36px; height: 36px; }
+body.mini-player .music-banner:hover #music-next-btn svg { width: 16px; height: 16px; }
+
+/* ====== 捲動內容與部落格列表 ====== */
+.content-section { background-color: #151515; position: relative; z-index: 10; min-height: 100vh; padding: 0 0 100px 0; display: flex; flex-direction: column; align-items: center; gap: 60px; }
+
+.glass-carousel { position: relative; width: 80vw; max-width: 1000px; aspect-ratio: 16 / 9; border-radius: 24px; margin: 0; background: transparent; border: 1px solid rgba(255, 255, 255, 0.2); border-top-color: rgba(255, 255, 255, 0.4); transition: opacity 1s ease-out, transform 1s ease-out; }
+.glass-carousel.hide-on-scroll { opacity: 0; transform: translateY(50px); }
+.carousel-viewport { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 24px; overflow: hidden; }
+.carousel-track { position: relative; width: 100%; height: 100%; }
+.carousel-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.05); transition: opacity 1.5s ease-in-out, transform 10s ease-out; z-index: 1; }
+.carousel-slide.active { opacity: 1; transform: scale(1); z-index: 2; }
+.carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.3); color: white; cursor: pointer; transition: all 0.3s ease; z-index: 10; }
+.carousel-btn:hover { background: rgba(255, 255, 255, 0.25); transform: translateY(-50%) scale(1.1); }
+.carousel-btn.prev { left: 20px; } .carousel-btn.next { right: 20px; }
+
+.blog-container { width: 80vw; max-width: 1000px; display: flex; flex-direction: column; gap: 24px; margin: 0; }
+.blog-post { display: flex; gap: 24px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 24px; color: white; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; height: 220px; box-sizing: border-box; overflow: hidden; }
+.blog-post:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5); border-color: rgba(255, 255, 255, 0.4); }
+.blog-post img.cover-img { width: 250px; height: 100%; object-fit: cover; border-radius: 12px; flex-shrink: 0; }
+.blog-content { width: 100%; display: flex; flex-direction: column; overflow: hidden; }
+.blog-content h3 { margin: 0 0 10px 0; font-size: 1.5rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.blog-content .date { font-size: 0.8rem; opacity: 0.6; margin-bottom: 12px; display: block; flex-shrink: 0;}
+.blog-content .post-text { margin: 0; line-height: 1.6; opacity: 0.9; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; }
+
+/* ====== 首頁分頁按鈕 ====== */
+.pagination-container { display: flex; gap: 8px; justify-content: center; margin-top: 20px; width: 80vw; max-width: 1000px; }
+.page-btn { width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2); color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; font-size: 1rem; }
+.page-btn:hover { background: rgba(255, 255, 255, 0.2); }
+.page-btn.active { background: rgba(255, 255, 255, 0.3); border-color: rgba(255, 255, 255, 0.5); font-weight: bold; }
+.page-btn.text-btn { width: auto; padding: 0 16px; border-radius: 20px; }
+
+/* ====== 獨立視圖排版 (包含頂部返回鍵) ====== */
+.page-container { background-color: #151515; width: 100%; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px 0 100px 0; position: relative; z-index: 10; }
+.top-back-nav { width: 90vw; max-width: 800px; display: flex; justify-content: flex-start; margin-bottom: 20px; }
+.page-container .content-panel { width: 90vw; max-width: 800px; text-align: left; line-height: 1.8; font-size: 1.15rem; color: rgba(255, 255, 255, 0.9); padding: 40px; animation: slideDown 0.6s ease-out; }
+.content-panel h1 { font-size: 2.5rem; color: white; margin-top: 0; margin-bottom: 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding-bottom: 16px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+.content-panel h2.post-title { font-size: 2.2rem; margin-top: 0; margin-bottom: 10px; color: white; }
+.content-panel .post-date { font-size: 0.9rem; color: rgba(255,255,255,0.5); margin-bottom: 30px; display: block; }
+.content-panel .post-cover-large { width: 100%; max-height: 400px; object-fit: cover; border-radius: 16px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.content-panel .post-body img { max-width: 100%; border-radius: 12px; margin: 20px 0; }
+
+/* ====== 登入與共用 ====== */
+.login-bar-container { width: 80vw; max-width: 1000px; display: flex; flex-direction: column; gap: 16px; margin: 0; }
+.ripple-btn { width: 100%; padding: 18px; font-size: 1.1rem; letter-spacing: 2px; position: relative; overflow: hidden; display: flex; justify-content: center; cursor: pointer; }
+.ripple { position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.5); transform: scale(0); pointer-events: none; }
+@keyframes ripple-anim { to { transform: scale(4); opacity: 0; } }
+.login-form-hidden { display: none; width: 100%; max-width: 400px; margin: 0 auto; animation: slideDown 0.3s ease-out; }
+.login-form-hidden.show { display: flex; flex-direction: column; gap: 12px; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+.glass-panel { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 24px; padding: 32px; }
+.form-control { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); color: white; backdrop-filter: blur(8px); border-radius: 12px; width: 100%; box-sizing: border-box; padding: 12px 16px; font-size: 1rem; transition: background 0.3s, border-color 0.3s; }
+.form-control:focus { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.4); outline: none; }
