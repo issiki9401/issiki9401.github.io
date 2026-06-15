@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+=======
+// 自動判斷 API 網址：如果在 GitHub Pages 就用絕對路徑，否則用相對路徑
+const API_BASE = window.location.hostname.includes('github.io') 
+    ? 'https://web.nttu.edu.tw/~c50/api.php' 
+    : 'api.php';
+
+>>>>>>> 654d0dc (blog update)
 // ====== 狀態更新邏輯 (分離縮小背景與浮動播放器) ======
 function updatePlayerState() {
     const hash = window.location.hash;
@@ -109,6 +117,7 @@ const firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 window.onYouTubeIframeAPIReady = function() {
+<<<<<<< HEAD
     if (document.getElementById('yt-player')) {
         player = new YT.Player('yt-player', {
             events: {
@@ -130,6 +139,9 @@ window.onYouTubeIframeAPIReady = function() {
         });
     }
     
+=======
+    if (document.getElementById('yt-player')) player = new YT.Player('yt-player');
+>>>>>>> 654d0dc (blog update)
     if (document.getElementById('yt-music-iframe')) {
         musicPlayer = new YT.Player('yt-music-iframe', {
             height: '200', width: '200', videoId: playlist[currentTrack].id,
@@ -144,9 +156,18 @@ const bgMuteBtn = document.getElementById('mute-btn');
 
 if (bgPlayPauseBtn) {
     bgPlayPauseBtn.addEventListener('click', () => {
+<<<<<<< HEAD
         if (player && typeof player.getPlayerState === 'function') {
             const state = player.getPlayerState();
             state === YT.PlayerState.PLAYING ? player.pauseVideo() : player.playVideo();
+=======
+        if (player && typeof player.pauseVideo === 'function') {
+            isBgPlaying ? player.pauseVideo() : player.playVideo();
+            bgPlayPauseBtn.innerHTML = isBgPlaying 
+                ? `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`
+                : `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>`;
+            isBgPlaying = !isBgPlaying;
+>>>>>>> 654d0dc (blog update)
         }
     });
 }
@@ -270,7 +291,11 @@ if (loginBtn) {
     loginBtn.addEventListener('click', async () => {
         const pwd = pwdInput.value;
         try {
+<<<<<<< HEAD
             const res = await fetch('api.php?action=login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pwd }) });
+=======
+            const res = await fetch(`${API_BASE}?action=login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pwd }) });
+>>>>>>> 654d0dc (blog update)
             if (res.ok) { localStorage.setItem('isAdmin', 'true'); window.location.href = 'editor.html'; } 
             else { alert('密碼錯誤！'); pwdInput.value = ''; }
         } catch (e) { alert('伺服器連線異常。'); }
@@ -290,7 +315,11 @@ async function loadBlogPosts() {
     const container = document.getElementById('blog-container');
     if (!container) return;
     try {
+<<<<<<< HEAD
         const res = await fetch('api.php?action=get_posts');
+=======
+        const res = await fetch(`${API_BASE}?action=get_posts`);
+>>>>>>> 654d0dc (blog update)
         const text = await res.text();
         try { allPosts = JSON.parse(text); } catch (e) { return; }
         if (allPosts.length === 0) return;
@@ -338,7 +367,11 @@ async function loadPostDetail(postId) {
     const container = document.getElementById('post-detail-container');
     container.innerHTML = '<div style="text-align: center; opacity: 0.7;">文章載入中...</div>';
     try {
+<<<<<<< HEAD
         const res = await fetch('api.php?action=get_posts');
+=======
+        const res = await fetch(`${API_BASE}?action=get_posts`);
+>>>>>>> 654d0dc (blog update)
         const posts = await res.json();
         const post = posts.find(p => p.id.toString() === postId);
         if (post) {
