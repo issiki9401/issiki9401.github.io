@@ -88,94 +88,6 @@
     </div>
 
     <script>
-<<<<<<< HEAD
-<<<<<<< HEAD
-        if(localStorage.getItem('isAdmin') !== 'true') window.location.href = 'index.html';
-
-        function switchTab(tab) {
-            document.getElementById('tab-write').classList.toggle('active', tab === 'write');
-            document.getElementById('tab-manage').classList.toggle('active', tab === 'manage');
-            document.getElementById('section-write').style.display = tab === 'write' ? 'flex' : 'none';
-            document.getElementById('section-manage').style.display = tab === 'manage' ? 'flex' : 'none';
-            if(tab === 'manage') loadManagePosts();
-        }
-
-        async function loadManagePosts() {
-            const list = document.getElementById('manage-list');
-            try {
-                const res = await fetch('api.php?action=get_posts');
-                const posts = await res.json();
-                if (posts.length === 0) {
-                    list.innerHTML = '<p style="color: rgba(255,255,255,0.7); text-align: center;">目前沒有任何文章。</p>';
-                    return;
-                }
-                list.innerHTML = posts.map(post => `
-                    <div class="manage-item">
-                        <div class="manage-info"><h4>${post.title}</h4><span>發佈於：${post.date}</span></div>
-                        <button class="glass-btn delete-btn" onclick="deletePost('${post.id}')"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg> 刪除</button>
-                    </div>
-                `).join('');
-            } catch (e) {
-                list.innerHTML = '<p style="color:red; text-align: center;">載入失敗，請檢查伺服器連線。</p>';
-            }
-        }
-
-        async function deletePost(id) {
-            if (!confirm('確認要刪除這篇文章嗎？此動作無法復原！')) return;
-            try {
-                const res = await fetch('api.php?action=delete_post', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id })
-                });
-                const data = await res.json();
-                if (data.success) { alert('刪除成功！'); loadManagePosts(); }
-                else { alert('刪除失敗！'); }
-            } catch (e) { alert('伺服器無回應。'); }
-        }
-
-        async function uploadFile(file) {
-            if (file.size > 2 * 1024 * 1024) alert('提醒：圖片大於 2MB。如果學校伺服器限制嚴格，可能會上傳失敗。建議先縮小圖片。');
-            const fd = new FormData(); fd.append('file', file);
-            try {
-                const res = await fetch('api.php?action=upload', { method: 'POST', body: fd });
-                const data = await res.json();
-                return data.success ? data.url : (alert('上傳失敗：' + data.message), null);
-            } catch (e) { alert('權限不足，請檢查 /uploads 資料夾。'); return null; }
-        }
-
-        function insertImage() {
-            const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*';
-            input.onchange = async e => {
-                const file = e.target.files[0]; if (!file) return;
-                const url = await uploadFile(file);
-                if (url) {
-                    document.getElementById('post-content').focus();
-                    document.execCommand('insertHTML', false, `<img src="${url}" alt="image" style="max-width: 100%; border-radius: 8px; margin: 10px 0; display: block;">`);
-                }
-            };
-            input.click();
-        }
-
-        document.getElementById('publish-btn').addEventListener('click', async () => {
-            const title = document.getElementById('post-title').value;
-            const content = document.getElementById('post-content').innerHTML;
-            const coverFile = document.getElementById('post-cover').files[0];
-            if(!title || !content.trim()) return alert('標題與內容不可為空！');
-            let coverUrl = '';
-            if (coverFile) { coverUrl = await uploadFile(coverFile); if (!coverUrl) return; }
-
-            try {
-                const res = await fetch('api.php?action=add_post', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ title, cover: coverUrl, content })
-                });
-                const data = await res.json();
-                if(data.success) { alert('發佈成功！'); window.location.href = 'index.html'; } 
-                else { alert('發佈失敗，請檢查資料夾權限'); }
-            } catch (err) { alert('伺服器無回應。'); }
-        });
-=======
-=======
->>>>>>> 7a4ecdb (blog change)
     if(localStorage.getItem('isAdmin') !== 'true') window.location.href = 'index.html';
 
     // 自動判斷 API 網址
@@ -264,10 +176,6 @@
             else { alert('發佈失敗，請檢查資料夾權限'); }
         } catch (err) { alert('伺服器無回應。'); }
     });
-<<<<<<< HEAD
->>>>>>> 654d0dc (blog update)
-=======
->>>>>>> 7a4ecdb (blog change)
     </script>
 </body>
 </html>
